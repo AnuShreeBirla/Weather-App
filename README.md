@@ -28,6 +28,8 @@ The app also shows environmental details like Air Quality Index, humidity, wind 
 - Sunrise & Sunset time  
 - Atmospheric pressure
 - Responsive design (works on laptop, mobile, and tablet)
+-  Dark / Light mode
+- Save favorite cities and sort them alphabetically
 - Background color changes based on temperature  
   - Blue → Cold  
   - Green → Normal  
@@ -84,8 +86,6 @@ https://openweathermap.org/api
 
 ### 🔮 Future Improvements
 
-- Dark / Light mode
-- Save favorite cities
 - Weather alerts
 
 ---
