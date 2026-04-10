@@ -32,7 +32,7 @@ The app also shows environmental details like Air Quality Index, humidity, wind 
 - Save favorite cities and sort them alphabetically
 - Background color changes based on temperature  
   - Blue → Cold  
-  - Green → Normal  
+  - Black/White → Normal  
   - Orange → Hot  
 
 ---
