@@ -17,15 +17,35 @@
 <body>
     <div class="container">
         <div class="header">
-            <h2> Weather </h2>
+            <div class="logo-area">
+                <h2> Weather </h2>
+                <button type="button" id="themeToggleBtn" title="Toggle Light/Dark Mode">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
             <div class="weather-input">
                 <input type="text" name="city" id="city_input" placeholder="Enter city name">
                 <button type="button" id="searchBtn">
                     <i class="fa-solid fa-magnifying-glass"></i> Search
                 </button>
-                <button type="button" id="locationBtn">
-                    <i class="fa-solid fa-location-arrow"></i> Current Location
+                <button type="button" id="saveFavBtn" title="Save current to Favorites">
+                    <i class="fa-solid fa-star"></i> Save City
                 </button>
+                <button type="button" id="locationBtn">
+                    <i class="fa-solid fa-location-arrow"></i> Location
+                </button>
+            </div>
+        </div>
+        <div class="favorites-section">
+            <div class="favorites-header">
+                <h3>Favorite Cities</h3>
+                <div class="sort-buttons">
+                    <button type="button" id="sortAscBtn" title="Sort A-Z"><i class="fa-solid fa-arrow-down-a-z"></i> A-Z</button>
+                    <button type="button" id="sortDescBtn" title="Sort Z-A"><i class="fa-solid fa-arrow-down-z-a"></i> Z-A</button>
+                </div>
+            </div>
+            <div id="favoritesList" class="favorites-list">
+                <!-- Favorite buttons will be injected here -->
             </div>
         </div>
         <div class="weather-data">
@@ -59,46 +79,13 @@
                             <p>____</p>
                         </div>
                     </div> 
-                    <!-- <div class="day-forecast">
-                        <div class="forecast-item">
-                            <div class="icon-wrapper">
-                                <img src="https://openweathermap.org/img/wn/02d.png" alt="" >
-                                <span>___&deg;C</span>
-                            </div>
-                            <p>____</p>
-                            <p>____</p>
-                        </div>
+                </div>
+                <div class="card recommendation-card">
+                    <h2>Recommendation</h2>
+                    <div class="recommendation-content">
+                        <i class="fa-solid fa-shirt fa-2x"></i>
+                        <h3 id="recommenderText">Fetching recommendation...</h3>
                     </div>
-                    <div class="day-forecast">
-                        <div class="forecast-item">
-                            <div class="icon-wrapper">
-                                <img src="https://openweathermap.org/img/wn/02d.png" alt="" >
-                                <span>___&deg;C</span>
-                            </div>
-                            <p>____</p>
-                            <p>____</p>
-                        </div>
-                    </div>
-                    <div class="day-forecast">
-                        <div class="forecast-item">
-                            <div class="icon-wrapper">
-                                <img src="https://openweathermap.org/img/wn/02d.png" alt="" >
-                                <span>___&deg;C</span>
-                            </div>
-                            <p>____</p>
-                            <p>____</p>
-                        </div>
-                    </div>
-                    <div class="day-forecast">
-                        <div class="forecast-item">
-                            <div class="icon-wrapper">
-                                <img src="https://openweathermap.org/img/wn/02d.png" alt="" >
-                                <span>___&deg;C</span>
-                            </div>
-                            <p>____</p>
-                            <p>____</p>
-                        </div>
-                    </div>      -->
                 </div>
             </div>
             <div class="weather-right">

@@ -14,6 +14,16 @@ feelsVal = document.getElementById('feelsVal'),
 hourlyForecastCard = document.querySelector('.hourly-forecast'),
 aqiList = ['Good', 'Fair', 'Moderate', 'Poor', 'Very Poor'];
 
+let themeToggleBtn = document.getElementById('themeToggleBtn'),
+    saveFavBtn = document.getElementById('saveFavBtn'),
+    sortAscBtn = document.getElementById('sortAscBtn'),
+    sortDescBtn = document.getElementById('sortDescBtn'),
+    favoritesList = document.getElementById('favoritesList'),
+    recommenderText = document.getElementById('recommenderText');
+
+let favoriteCities = JSON.parse(localStorage.getItem('favorites')) || [];
+let currentFetchCityName = "";
+
 function getWeatherDetails(name,lat, lon, country, state){
     let FORECAST_API_URL= `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${api_key}`,
     WEATHER_API_URL= `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${api_key}`,
@@ -91,6 +101,7 @@ function getWeatherDetails(name,lat, lon, country, state){
 
     fetch(WEATHER_API_URL).then(res => res.json()).then( data => {
         let date = new Date();
+        currentFetchCityName = name;
         currentWeatherCard.innerHTML = `
             <div class="current-weather">
                 <div class="details">
@@ -147,6 +158,37 @@ function getWeatherDetails(name,lat, lon, country, state){
         visibilityVal.innerHTML= `${visibility / 1000}km`;
         windSpeedVal.innerHTML=`${speed}m/s`;
         feelsVal.innerHTML= `${(feels_like - 273.15).toFixed(2)}&deg;C`;
+
+        let tempC = data.main.temp - 273.15;
+        
+        document.body.classList.remove('temp-very-hot', 'temp-hot', 'temp-cold', 'temp-very-cold');
+        if (tempC > 35) {
+            document.body.classList.add('temp-very-hot');
+        } else if (tempC > 30) {
+            document.body.classList.add('temp-hot');
+        } else if (tempC < 10) {
+            document.body.classList.add('temp-very-cold');
+        } else if (tempC < 20) {
+            document.body.classList.add('temp-cold');
+        }
+
+        let recommendation = "";
+        if (tempC > 35) {
+            recommendation = "Wear very light clothes, it's very hot today! 🥵👕";
+        } else if (tempC > 30 && tempC <= 35) {
+            recommendation = "Wear light clothes, it's warm today! 👕";
+        } else if (tempC >= 20 && tempC <= 30) {
+            recommendation = "Good weather! Most normal clothes will work fine. 🌤️👕";
+        } else if (tempC >= 10 && tempC < 20) {
+            recommendation = "It's slightly cold. A light jacket or long sleeves would be perfect. 🧥";
+        } else {
+            recommendation = "It's very cold! You'll need layers and a warm jacket. 🧥❄️👔";
+        }
+        if (recommenderText) {
+            recommenderText.dataset.baseRecommendation = recommendation;
+            recommenderText.innerHTML = recommendation;
+        }
+
     }).catch(() => {
         alert('Failed to fetch current weather');
     });
@@ -169,6 +211,13 @@ function getWeatherDetails(name,lat, lon, country, state){
                 </div>
             `;
         }
+
+        if (hourlyForecast[0] && hourlyForecast[0].pop > 0.2) {
+            if (recommenderText) recommenderText.innerHTML = "Bring an umbrella! ☔ (Rain chance > 20%)";
+        } else if (recommenderText && recommenderText.dataset.baseRecommendation) {
+            recommenderText.innerHTML = recommenderText.dataset.baseRecommendation;
+        }
+
         let uniqueForecastDays = [];
         let fiveDaysForecast = data.list.filter( forecast => {
             let forecastDate = new Date(forecast.dt_txt).getDate();
@@ -231,3 +280,64 @@ searchBtn.addEventListener('click', getCityCoordinates);
 locationBtn.addEventListener('click', getUserCoordinates);
 cityInput.addEventListener('keyup', e => e.key === 'Enter' && getCityCoordinates());
 window.addEventListener('load', getUserCoordinates);
+
+// Theme initialization
+if (localStorage.getItem('theme') === 'light') {
+    document.body.classList.add('light-mode');
+    themeToggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+}
+
+themeToggleBtn.addEventListener('click', () => {
+    document.body.classList.toggle('light-mode');
+    if (document.body.classList.contains('light-mode')) {
+        localStorage.setItem('theme', 'light');
+        themeToggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+    } else {
+        localStorage.setItem('theme', 'dark');
+        themeToggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+    }
+});
+
+// Favorites feature initialization
+const fetchForCity = (cityName) => {
+    cityInput.value = cityName;
+    getCityCoordinates();
+};
+window.fetchForCity = fetchForCity;
+
+const renderFavorites = (citiesArray) => {
+    // Filter out invalid cities and sort based on display criteria via HOF map
+    // We already do sorting logic in handlers below.
+    favoritesList.innerHTML = citiesArray.map(city => {
+        return `<button type="button" class="fav-city-btn" onclick="fetchForCity('${city}')">${city}</button>`;
+    }).join('');
+};
+
+const saveFavoriteCity = () => {
+    if (!currentFetchCityName) return;
+    // Using simple array matching logic
+    if (!favoriteCities.includes(currentFetchCityName)) {
+        favoriteCities.push(currentFetchCityName);
+        localStorage.setItem('favorites', JSON.stringify(favoriteCities));
+        renderFavorites(favoriteCities);
+    } else {
+        alert(`${currentFetchCityName} is already in favorites!`);
+    }
+};
+
+saveFavBtn.addEventListener('click', saveFavoriteCity);
+
+sortAscBtn.addEventListener('click', () => {
+    // Sort ascending using HOF sort
+    let sortedList = [...favoriteCities].sort((a, b) => a.localeCompare(b));
+    renderFavorites(sortedList);
+});
+
+sortDescBtn.addEventListener('click', () => {
+    // Sort descending using HOF sort
+    let sortedList = [...favoriteCities].sort((a, b) => b.localeCompare(a));
+    renderFavorites(sortedList);
+});
+
+// Initial render
+renderFavorites(favoriteCities);

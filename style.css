@@ -19,8 +19,56 @@ body{
     color: #fff;
     font-family: sans-serif;
     padding: 0 15px;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+body.light-mode {
+    --background-color1: #f4f4f4;
+    --background-color2: #ffffff;
+    color: #272727;
+}
+
+/* Dynamic Temperature Based Backgrounds for Cards */
+body.temp-very-hot {
+    --background-color2: #4a0c0c; /* Deepest Red for Dark Mode */
+}
+body.light-mode.temp-very-hot {
+    --background-color2: #ffc4c4; /* Deepest Red for Light Mode */
+}
+
+body.temp-hot {
+    --background-color2: #3a1515; /* Red shade for Dark Mode */
+}
+body.light-mode.temp-hot {
+    --background-color2: #ffe0e0; /* Red shade for Light Mode */
+}
+
+body.temp-cold {
+    --background-color2: #141f36; /* Blue shade for Dark Mode */
+}
+body.light-mode.temp-cold {
+    --background-color2: #e3edff; /* Blue shade for Light Mode */
+}
+
+body.temp-very-cold {
+    --background-color2: #081126; /* Deepest Blue for Dark Mode */
+}
+body.light-mode.temp-very-cold {
+    --background-color2: #ccdcff; /* Deepest Blue for Light Mode */
+}
+
+body.light-mode .card p,
+body.light-mode .current-weather p {
+    color: #555 !important;
+}
+
+body.light-mode #city_input {
+    color: #272727;
+}
+
+body.light-mode #city_input::placeholder {
+    color: #777;
+}
 hr{
     margin-bottom: 10px;
 }
@@ -34,6 +82,26 @@ hr{
     align-items: center;
     margin-bottom: 10px;
     padding: 15px 0;
+    transition: background-color 0.3s ease;
+
+    & .logo-area {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    & #themeToggleBtn {
+        background: none;
+        border: none;
+        color: inherit;
+        font-size: 20px;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+
+        &:hover {
+            transform: scale(1.1);
+        }
+    }
 
     & #city_input{
         background-color: var(--background-color2);
@@ -41,7 +109,8 @@ hr{
         padding: 12px;
         font-size: 16px;
         border-radius: 25px;
-        color: #fff;
+        color: inherit;
+        transition: background-color 0.3s ease, color 0.3s ease;
 
         &:focus{
             outline: none;
@@ -54,7 +123,19 @@ hr{
         padding: 12px;
         border-radius: 25px;
         background-color: #fff;
+        color: #000;
         cursor: pointer;
+    }
+
+    & #saveFavBtn{
+        border: none;
+        font-size: 16px;
+        padding: 12px;
+        border-radius: 25px;
+        background-color: #ff6600;
+        color: #fff;
+        cursor: pointer;
+        margin-left: 10px;
     }
 
     & #locationBtn{
@@ -63,8 +144,61 @@ hr{
         padding: 12px;
         border-radius: 25px;
         background-color: #00ffee;
+        color: #000;
         cursor: pointer;
+        margin-left: 10px;
     }
+}
+
+.favorites-section {
+    background-color: var(--background-color2);
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.favorites-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.sort-buttons button {
+    border: none;
+    padding: 8px 12px;
+    border-radius: 15px;
+    background-color: var(--background-color1);
+    color: inherit;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.sort-buttons button:hover {
+    transform: scale(1.05);
+}
+
+.favorites-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.fav-city-btn {
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    background-color: var(--background-color1);
+    color: inherit;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.fav-city-btn:hover {
+    transform: translateY(-2px);
 }
 
 .card{
@@ -72,6 +206,7 @@ hr{
     padding: 15px;
     border-radius: 15px;
     margin-bottom: 15px;
+    transition: background-color 0.3s ease, color 0.3s ease;
 
     & p{
         font-size: 14px;
@@ -80,7 +215,21 @@ hr{
     & h2{
         font-size: 32px;
         font-weight: 500;
+        margin-bottom: 10px;
     }
+}
+
+.recommendation-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 10px 0;
+}
+
+.recommendation-content h3 {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.4;
 }
 
 .weather-data{
